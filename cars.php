@@ -2,65 +2,59 @@
 //require_once('csv-tools.php');
 ini_set('memory_limit','560M');
 $FileName  = "car-db.csv";
-$csvData = getCsvData($fileName);
+$csvData = getCsvData($FileName);
 $result = [];
 $maker = [];
-$arr = array ('first' => 'a', 'second' => 'b', );
-$key = array_search ('a', $arr);
+$makers = [];
 $header = $csvData[0];
-$keyMaker = array_search ('make', $header);
-$keyModel = array_search ('model', $header);
-
-for($i = 0; $i < $csvData[-1];$i++){
-    if(isset($key)){
-        $maker[$i] = $key;
-    }
-}
+$idxMaker = array_search ('make', $header);
+$idxModel = array_search ('model', $header);
 
 
-function getCsvData($FileName, $withHeader = true){
+function getCsvData($FileName)
+{
 
     if (!file_exists($FileName)) {
         echo "$FileName nem található. ";
         return false;
     }
-
-    if (file_exists($FileName)) {
-        $csvFile = fopen($FileName, 'r');
-        $header = fgetcsv($csvFile);
-        $lines = [];
-        if ($withHeader) {
-            $lines[] = $header;
-        }
-        else{
-            $lines = [];
-        }
-        while (! feof($csvFile)) {
-            $line = fgetcsv($csvFile);
-            $lines[] = $line;
-        }
-        fclose($csvFile);
-        return $lines;
+    $csvFile = fopen($FileName, 'r');
+    $lines = [];
+    while (! feof($csvFile)) {
+        $line = fgetcsv($csvFile);
+        $lines[] = $line;
     }
+    fclose($csvFile);
+    return $lines;
 }
 
-if (!empty($csvData)) {
-    $maker = '';
-    $model = '';
-    foreach ($csvData as $idy => $line) {
-        if ($idx == 0) {
-            continue;
-        }
-        if ($maker != $liner[$idxMaker]){
-            $maker = $line[$idxMaker];
-        }
-        if ($model != $liner[$idxModel]){
-            $model = $line[$idxModel];
-            $result[$maker][] = $model;
-        }
-    }
-    print_r($result);
+
+if (empty($csvData)) {
+    echo "Nincs adat.";
+    return false;
 }
+$maker = '';
+$model = '';
+foreach ($csvData as $idx => $line) {
+    if(!is_array($line)){
+        continue;
+    }
+    if ($idx == 0) {
+        continue;
+    }
+    if ($maker != $line[$idxMaker]){
+        $maker = $line[$idxMaker];
+        $makers[] = $maker;
+    }
+    if ($model != $line[$idxModel]){
+        $model = $line[$idxModel];
+        $result[$maker][] = $model;
+
+    }
+}
+//print_r($result);
+print_r($makers)
+
 
 
 
