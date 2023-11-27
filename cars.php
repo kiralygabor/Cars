@@ -28,6 +28,45 @@ function getCsvData($FileName)
     return $lines;
 }
 
+function getMakers($csvData)
+{
+    if (empty($csvData)) {
+        echo "Nincs adat.";
+        return false;
+    }
+    $maker = '';
+    $header = $csvData[0];
+    $idxMaker = array_search ('make', $header);
+    foreach ($csvData as $idx => $line) {
+        if(!is_array($line)){
+            continue;
+        }
+        if ($idx == 0) {
+            continue;
+        }
+        if ($maker != $line[$idxMaker]){
+            $maker = $line[$idxMaker];
+            $makers[] = $maker;
+        }
+    }
+    return $makers;
+}
+
+function insertMakers($mysqli, $makers, $truncate = false)
+{
+    $mysqli = new mysqli("localhost","root",null,"cars");
+
+    if ($mysqli -> connect_errno) {
+        echo "Failed to connect to MySQL: " . $mysqli -> connect_error;
+        exit();
+    }
+    $mysqli->query("TRUNCATE TABLE makers;");
+    foreach ($makers as $maker){
+        $mysqli->query("INSERT INTO makers (name) VALUES ('$maker')");
+        echo "$maker\n";
+    }
+    return $result;
+}
 
 if (empty($csvData)) {
     echo "Nincs adat.";
@@ -44,40 +83,22 @@ foreach ($csvData as $idx => $line) {
     }
     if ($maker != $line[$idxMaker]){
         $maker = $line[$idxMaker];
-        $makers[] = $maker;
     }
     if ($model != $line[$idxModel]){
         $model = $line[$idxModel];
         $result[$maker][] = $model;
-
     }
 }
+
 //print_r($result);
-print_r($makers)
-
-
-
+$makers = getMakers($csvData);
+$result = insertMakers($mysqli, $makers, true);
+//print_r($makers);
 
 /*
-
-$maker = [];
-$model = [];
-$result = [];
-
-if (($fp = fopen("car-db.csv", "r")) !== FALSE) { 
-    while (($record = fgetcsv($fp)) !== FALSE) {
-        $row++;
-    }
-  }
-
-if(file_exists($cars)) {
-    for ($i = 0; $i < $row; $i++){
-        $filecars = fopen($cars, 'r');
-        $maker = fgetcsv($filecars);
-        fclose($filecars);
-    }    
-}
-
-var_dump($maker)
+$result = $mysqli-> query("SELECT COUNT(id) as cnt FROM makers;");
+$row = $result->fetch_assoc();
+echo "{$row['cnt']} sor van;\n";
+$mysqli -> close();
 */
 ?>
