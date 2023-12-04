@@ -1,6 +1,7 @@
 <?php 
 //require_once('csv-tools.php');
 require_once('db-tools.php');
+require_once('MakersDbTools');
 ini_set('memory_limit','560M');
 $FileName  = "car-db.csv";
 $csvData = getCsvData($FileName);
@@ -10,7 +11,7 @@ $makers = [];
 $header = $csvData[0];
 $idxMaker = array_search ('make', $header);
 $idxModel = array_search ('model', $header);
-
+$makersDbTool = new MakersDbTools();
 
 function getCsvData($FileName)
 {
@@ -66,7 +67,7 @@ function insertMakers($mysqli, $makers, $truncate = false)
     $mysqli->query("TRUNCATE TABLE makers;");
     foreach ($makers as $maker){
         //$result = $mysqli->query("INSERT INTO makers (name) VALUES ('$maker')");
-        $result = createMaker($mysqli, $maker);
+        $result = $makersDbTool->createMaker($maker);
         if(!$result){
             $errors[] = $maker;
         }
@@ -108,8 +109,8 @@ $row = $result->fetch_assoc();
 echo "{$row['cnt']} sor van;\n";
 $mysqli -> close();
 */
-$makers = getAllMakers($mysqli);
-$cnt = count($makers);
+$allMakers = $makersDbTool->getAllMakers($mysqli);
+$cnt = count($allMakers);
 echo $cnt . "sor van;\n";
 
 
