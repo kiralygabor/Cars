@@ -57,6 +57,7 @@ function insertMakers($mysqli, $makers, $truncate = false)
 {
     $mysqli = new mysqli("localhost","root",null,"cars");
     $errors = [];
+    $makers = getMakers($csvData);
 
     if ($mysqli -> connect_errno) {
         echo "Failed to connect to MySQL: " . $mysqli -> connect_error;
@@ -64,7 +65,8 @@ function insertMakers($mysqli, $makers, $truncate = false)
     }
     $mysqli->query("TRUNCATE TABLE makers;");
     foreach ($makers as $maker){
-        $result = $mysqli->query("INSERT INTO makers (name) VALUES ('$maker')");
+        //$result = $mysqli->query("INSERT INTO makers (name) VALUES ('$maker')");
+        $result = createMaker($mysqli, $maker);
         if(!$result){
             $errors[] = $maker;
         }
@@ -96,7 +98,7 @@ foreach ($csvData as $idx => $line) {
 }
 
 //print_r($result);
-$makers = getMakers($csvData);
+//$makers = getMakers($csvData);
 $result = insertMakers($mysqli, $makers, true);
 //print_r($makers);
 
@@ -106,4 +108,9 @@ $row = $result->fetch_assoc();
 echo "{$row['cnt']} sor van;\n";
 $mysqli -> close();
 */
+$makers = getAllMakers($mysqli);
+$cnt = count($makers);
+echo $cnt . "sor van;\n";
+
+
 ?>
