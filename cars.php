@@ -1,8 +1,8 @@
 <?php 
 //require_once('csv-tools.php');
 require_once('db-tools.php');
-require_once('MakersDbTools');
-ini_set('memory_limit','560M');
+require_once('MakersDbTools.php');
+ini_set('memory_limit','1024M');
 $FileName  = "car-db.csv";
 $csvData = getCsvData($FileName);
 $result = [];
@@ -54,64 +54,35 @@ function getMakers($csvData)
     return $makers;
 }
 
-function insertMakers($mysqli, $makers, $truncate = false)
-{
-    $mysqli = new mysqli("localhost","root",null,"cars");
+    $truncateMakers = $makersDbTool->truncateMaker($maker);
     $errors = [];
-    $makers = getMakers($csvData);
-
-    if ($mysqli -> connect_errno) {
-        echo "Failed to connect to MySQL: " . $mysqli -> connect_error;
-        exit();
-    }
-    $mysqli->query("TRUNCATE TABLE makers;");
     foreach ($makers as $maker){
-        //$result = $mysqli->query("INSERT INTO makers (name) VALUES ('$maker')");
+
         $result = $makersDbTool->createMaker($maker);
         if(!$result){
             $errors[] = $maker;
         }
         echo "$maker\n";
     }
-    return $errors;
-}
+    if (!empty($errors)){
+        print_r($erorrs);
+    }
+
 
 if (empty($csvData)) {
     echo "Nincs adat.";
     return false;
 }
-$maker = '';
-$model = '';
-foreach ($csvData as $idx => $line) {
-    if(!is_array($line)){
-        continue;
-    }
-    if ($idx == 0) {
-        continue;
-    }
-    if ($maker != $line[$idxMaker]){
-        $maker = $line[$idxMaker];
-    }
-    if ($model != $line[$idxModel]){
-        $model = $line[$idxModel];
-        $result[$maker][] = $model;
-    }
-}
 
-//print_r($result);
-//$makers = getMakers($csvData);
-$result = insertMakers($mysqli, $makers, true);
-//print_r($makers);
 
-/*
-$result = $mysqli-> query("SELECT COUNT(id) as cnt FROM makers;");
-$row = $result->fetch_assoc();
-echo "{$row['cnt']} sor van;\n";
-$mysqli -> close();
-*/
-$allMakers = $makersDbTool->getAllMakers($mysqli);
+
+$csvData = getCsvData($FileName);
+$makers = getMakers($csvData);
+
+$allMakers = $makersDbTool->getAllMakers();
 $cnt = count($allMakers);
-echo $cnt . "sor van;\n";
-
+//echo $cnt . "sor van;\n";
+$rows =  count($makers);
+print_r($rows . " sor van.")
 
 ?>
