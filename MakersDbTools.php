@@ -19,7 +19,7 @@ class MakersDbTools {
 
     function createMaker($maker)
     {
-        $result = $this->mysqli->query("INSERT INTO makers (name) VALUES ('$maker')");
+        $result = $this->mysqli->query("INSERT INTO " . self::DBTABLE . " (name) VALUES ('$maker')");
         if (!$result) {
             echo "Hiba történt a $maker beszúrása közben";
 
@@ -30,7 +30,7 @@ class MakersDbTools {
     function updateMaker($data)
     {
     $makerName = $data['name'];
-    $result = $this->mysqli->query("UPDATE makers SET name = $makerName");
+    $result = $this->mysqli->query("UPDATE " . self::DBTABLE ." SET name = $makerName");
     if (!$result) {
         echo "Hiba történt a $makerName beszúrása közben";
         return $result;
@@ -41,7 +41,7 @@ class MakersDbTools {
 
     function getMaker($id)
     {   
-    $result = $this->mysqli->query("SELECT * FROM makers WHERE id = $id");
+    $result = $this->mysqli->query("SELECT * FROM " . self::DBTABLE . " WHERE id = $id");
     $maker = $result->fetch_assoc();
     $result ->  free_result();
     return $maker;
@@ -49,14 +49,14 @@ class MakersDbTools {
 
     function getMakerByName($name)
     {
-    $result =$this->mysqli->query("SELECT * FROM makers WHERE name = $name");
+    $result =$this->mysqli->query("SELECT * FROM " . self::DBTABLE . " WHERE name = $name");
     $maker = $result->fetch_assoc();
     return $maker;
     }
 
     function getAllMakers()
     {
-        $result = $this->mysqli->query("SELECT * FROM makers");
+        $result = $this->mysqli->query("SELECT * FROM " . self::DBTABLE);
         $maker = $result->fetch_all(MYSQLI_ASSOC);
         $result ->  free_result();
         return $maker;
@@ -64,13 +64,13 @@ class MakersDbTools {
 
     function delMaker($id)
     {
-    $result = $this->mysqli->query("DELETE makers WHERE id = $id");
+    $result = $this->mysqli->query("DELETE {self::DBTABLE} WHERE id = $id");
     return $result;
     }
 
-    function truncateMaker($maker)
+    function truncateMaker()
     {
-        $result = $this->mysqli->query("TRUNCATE TABLE makers");
+        $result = $this->mysqli->query("TRUNCATE TABLE " . self::DBTABLE);
         return $result;
     }
 

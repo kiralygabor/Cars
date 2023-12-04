@@ -7,6 +7,20 @@
     <title>Cars</title>
 </head>
 <body>
-    
+    <h1>Cars</h1>
+    <select id="carsDropdown" name="carsDropdown">
+            <option value="">Válassz kocsit</option>
+            <?php
+            require_once('MakersDbTools.php');
+
+            $makersDbTools = new MakersDbTools();
+            //
+            $makers = $makersDbTools->getAllCounties();
+
+            foreach ($counties as $county) {
+                echo '<option value="' . $county['id'] . '">' . $county['name'] . '</option>';
+            }
+            ?>
+        </select>
 </body>
 </html>
