@@ -4,23 +4,18 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cars</title>
+    <title>Autók</title>
+
+    <script src="js/jsquery-3.7.1.js" type="text/javascript"></script>
+    <script src="js/cars.js" type="text/javascript"></script>
+
+    <link rel="stylesheet" href="fontawesome/css/all.css" type="text/css">
+    <link rel="stylesheet" href="css/cars.css" type="text/css">
 </head>
 <body>
-    <h1>Cars</h1>
-    <select id="carsDropdown" name="carsDropdown">
-            <option value="">Válassz kocsit</option>
-            <?php
-            require_once('MakersDbTools.php');
-
-            $makersDbTools = new MakersDbTools();
-            //
-            $makers = $makersDbTools->getAllCounties();
-
-            foreach ($counties as $county) {
-                echo '<option value="' . $county['id'] . '">' . $county['name'] . '</option>';
-            }
-            ?>
-        </select>
+    <nav>
+        <a href="makers.php"><button>Gyártók</button></a>
+        <a href="models.php"><button>Modellek</button></a>
+    </nav>
 </body>
 </html>

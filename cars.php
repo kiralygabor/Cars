@@ -78,7 +78,9 @@ if (empty($csvData)) {
 
 $csvData = getCsvData($FileName);
 $makers = getMakers($csvData);
-
+foreach ($makers as $maker){
+    $makersDbTool->createMaker($maker);
+}
 $allMakers = $makersDbTool->getAllMakers();
 $cnt = count($allMakers);
 //echo $cnt . "sor van;\n";
