@@ -1,6 +1,6 @@
 <?php
-class MakersDbTools {
-    const DBTABLE = 'makers';
+class ModelsDbTools {
+    const DBTABLE = 'models';
 
     private $mysqli;
 
@@ -17,58 +17,58 @@ class MakersDbTools {
         $this->mysqli->close();
     }
 
-    function createMaker($maker)
+    function createModel($model)
     {
-        $result = $this->mysqli->query("INSERT INTO " . self::DBTABLE . " (name) VALUES ('$maker')");
+        $result = $this->mysqli->query("INSERT INTO " . self::DBTABLE . " (name) VALUES ('$model')");
         if (!$result) {
-            echo "Hiba történt a $maker beszúrása közben";
+            echo "Hiba történt a $model beszúrása közben";
 
         }
         return $result;
     }
 
-    function updateMaker($data)
+    function updateModel($data)
     {
-    $makerName = $data['name'];
-    $result = $this->mysqli->query("UPDATE " . self::DBTABLE ." SET name = $makerName");
+    $modelName = $data['name'];
+    $result = $this->mysqli->query("UPDATE " . self::DBTABLE ." SET name = $modelName");
     if (!$result) {
-        echo "Hiba történt a $makerName beszúrása közben";
+        echo "Hiba történt a $modelName beszúrása közben";
         return $result;
     }
-    $maker = getMakerByName($makerName);
+    $model = getModelByName($modelName);
     return $result;
     }
 
-    function getMaker($id)
+    function getModel($id)
     {   
     $result = $this->mysqli->query("SELECT * FROM " . self::DBTABLE . " WHERE id = $id");
-    $maker = $result->fetch_assoc();
+    $model = $result->fetch_assoc();
     $result ->  free_result();
-    return $maker;
+    return $model;
     }
 
-    function getMakerByName($name)
+    function getModelByName($name)
     {
     $result =$this->mysqli->query("SELECT * FROM " . self::DBTABLE . " WHERE name = $name");
-    $maker = $result->fetch_assoc();
-    return $maker;
+    $model = $result->fetch_assoc();
+    return $model;
     }
 
-    function getAllMakers()
+    function getAllModels()
     {
         $result = $this->mysqli->query("SELECT * FROM " . self::DBTABLE);
-        $maker = $result->fetch_all(MYSQLI_ASSOC);
+        $model = $result->fetch_all(MYSQLI_ASSOC);
         $result ->  free_result();
-        return $maker;
+        return $model;
     }
 
-    function delMaker($id)
+    function delModel($id)
     {
     $result = $this->mysqli->query("DELETE {self::DBTABLE} WHERE id = $id");
     return $result;
     }
 
-    function truncateMaker()
+    function truncateModel()
     {
         $result = $this->mysqli->query("TRUNCATE TABLE " . self::DBTABLE);
         return $result;

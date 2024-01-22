@@ -97,6 +97,75 @@ class Page
         echo "</div><br>";
     }
 
+    static function showModelsTable($models)
+    {
+        echo '<table id="models-table">';
+        self::showModelsTableHead();
+        self::showModelsTableBody($models);
+        echo "</table>";
+    }
+
+    static function showModelsTableHead()
+    {
+        echo '
+        <thead>
+            <tr>
+                <th class="id-col">#</th><th>Megnevezés</th>
+                <th style="float: right; display: flex">
+                    Művelet&nbsp;
+                    <button id="btn-add" title="Új"><i class="fa fa-plus"></i></button>
+                </th>
+            </tr>
+            <tr id="editor" class="hidden"">
+                <form method="post" action="#">
+                    <th><input type="hidden" id="id" name="id"></th>
+                    <th><input type="search" id="name" name="name" placeholder="Gyártó"></th>
+                    <th class="flex">
+                        <button type="submit" id="btn-save" name="btn-save" title="Ment">
+                            <i class="fa fa-save"></i></button>
+                        <button type="button" id="btn-cancel" title="Mégse">
+                            <i class="fa fa-cancel"></i></button>
+                    </th>
+                </form>
+            </tr>
+        </thead>
+        ';
+    }
+
+    static function showModelsTableBody(array $models)
+    {
+        echo '<tbody>';
+        $i = 0;
+        foreach ($models as $model) {
+            $onClick = sprintf('btnEditOnClick(%d, "%s")', $model['id'], $model['name']);
+            echo "
+            <tr class='" . (++$i % 2 ? "odd" : "even") . "'>
+                <td>{$model['id']}</td>
+                <td>{$model['name']}</td>
+                <td class='flex float-right'>
+                    <button type='button' id='btn-edit' onclick='$onClick' title='Módosít'><i class='fa fa-edit'></i></button>
+                    <form method='post' action=''>
+                        <button type='submit' id='btn-del' name='btn-del' value='{$model['id']}' title='Töröl'><i class='fa fa-trash'></i></button>
+                    </form>
+                </td>
+            </tr>";
+        }
+        echo '</tbody>';
+    }
+
+    static function showModelsAbcButtons(array $abc)
+    {
+        echo "<div style='display: flex'>";
+        foreach ($abc as $ch) {
+            echo "
+            <form method='post' action='models.php'>
+                <input type='hidden' name='ch' value='$ch'>
+                <button type='submit'>$ch</button>&nbsp;
+            </form>
+            ";
+        }
+        echo "</div><br>";
+    }
     static function showSearchBar()
     {
         echo '
